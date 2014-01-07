@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="IconLoader library">
+    <output-path>$PROJECT_DIR$</output-path>
+    <root id="archive" name="iconloader.jar">
+      <element id="module-output" name="IconLoader" />
+    </root>
+  </artifact>
+</component>

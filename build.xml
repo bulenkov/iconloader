@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 1998-2014 Konstantin Bulenkov
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project name="iconloader" default="all">
+  
+  
+  <!--<property file="iconloader.properties"/>-->
+
+  <property name="skip.tests" value="true"/>
+
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.apk"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.eawtstub.classpath">
+    <pathelement location="${basedir}/lib/eawtstub.jar"/>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module IconLoader -->
+  
+  <dirname property="module.iconloader.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.iconloader" value="${compiler.args}"/>
+  
+  <property name="iconloader.output.dir" value="${module.iconloader.basedir}/out/production/IconLoader"/>
+  <property name="iconloader.testoutput.dir" value="${module.iconloader.basedir}/out/test/IconLoader"/>
+  
+  <path id="iconloader.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="iconloader.module.production.classpath">
+    <path refid="library.eawtstub.classpath"/>
+  </path>
+  
+  <path id="iconloader.runtime.production.module.classpath">
+    <pathelement location="${iconloader.output.dir}"/>
+    <path refid="library.eawtstub.classpath"/>
+  </path>
+  
+  <path id="iconloader.module.classpath">
+    <pathelement location="${iconloader.output.dir}"/>
+    <path refid="library.eawtstub.classpath"/>
+  </path>
+  
+  <path id="iconloader.runtime.module.classpath">
+    <pathelement location="${iconloader.testoutput.dir}"/>
+    <pathelement location="${iconloader.output.dir}"/>
+    <path refid="library.eawtstub.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.iconloader">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.iconloader">
+    <patternset refid="excluded.from.module.iconloader"/>
+  </patternset>
+  
+  <path id="iconloader.module.sourcepath">
+    <dirset dir="${module.iconloader.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.iconloader" depends="compile.module.iconloader.production,compile.module.iconloader.tests" description="Compile module IconLoader"/>
+  
+  <target name="compile.module.iconloader.production" description="Compile module IconLoader; production classes">
+    <mkdir dir="${iconloader.output.dir}"/>
+    <javac destdir="${iconloader.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.iconloader}"/>
+      <bootclasspath refid="iconloader.module.bootclasspath"/>
+      <classpath refid="iconloader.module.production.classpath"/>
+      <src refid="iconloader.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.iconloader"/>
+    </javac>
+    
+    <copy todir="${iconloader.output.dir}">
+      <fileset dir="${module.iconloader.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.iconloader.tests" depends="compile.module.iconloader.production" description="compile module IconLoader; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.iconloader" description="cleanup module">
+    <delete dir="${iconloader.output.dir}"/>
+    <delete dir="${iconloader.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.iconloader" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.iconloader" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.iconloader:jar" value="${basedir}"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.iconloader.jar" value="${artifacts.temp.dir}/iconloader.jar"/>
+  </target>
+  
+  <target name="artifact.iconloader:jar" depends="init.artifacts, compile.module.iconloader" description="Build &#39;iconloader:jar&#39; artifact">
+    <property name="artifact.temp.output.iconloader:jar" value="${artifacts.temp.dir}/iconloader_jar"/>
+    <mkdir dir="${artifact.temp.output.iconloader:jar}"/>
+    <jar destfile="${temp.jar.path.iconloader.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${iconloader.output.dir}"/>
+    </jar>
+    <copy file="${temp.jar.path.iconloader.jar}" tofile="${artifact.temp.output.iconloader:jar}/iconloader.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.iconloader:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.iconloader:jar}"/>
+    <copy todir="${artifact.output.iconloader:jar}">
+      <fileset dir="${artifact.temp.output.iconloader:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
