@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
   <settings default="">
     <module2copyright>
-      <element module="All" copyright="Konstantin Bulenkov" />
+      <element module="All" copyright="JetBrains" />
     </module2copyright>
   </settings>
 </component>
