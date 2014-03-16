@@ -16,7 +16,6 @@
 
 package com.bulenkov.iconloader.util;
 
-import com.bulenkov.iconloader.IconLoader;
 import com.bulenkov.iconloader.IsRetina;
 import com.bulenkov.iconloader.JBHiDPIScaledImage;
 import com.bulenkov.iconloader.RetinaImage;
@@ -119,37 +118,6 @@ public class UIUtil {
 
   public static Color getTreeTextBackground() {
     return UIManager.getColor("Tree.textBackground");
-  }
-
-  public static Icon getTreeNodeIcon(boolean expanded, boolean selected, boolean focused) {
-    boolean white = (selected && focused) || isUnderDarcula();
-
-    Icon selectedIcon = getTreeSelectedExpandedIcon();
-    Icon notSelectedIcon = getTreeExpandedIcon();
-
-    int width = Math.max(selectedIcon.getIconWidth(), notSelectedIcon.getIconWidth());
-    int height = Math.max(selectedIcon.getIconWidth(), notSelectedIcon.getIconWidth());
-
-    return new CenteredIcon(expanded ? (white ? getTreeSelectedExpandedIcon() : getTreeExpandedIcon())
-        : (white ? getTreeSelectedCollapsedIcon() : getTreeCollapsedIcon()),
-        width, height, false
-    );
-  }
-
-  public static Icon getTreeCollapsedIcon() {
-    return UIManager.getIcon("Tree.collapsedIcon");
-  }
-
-  public static Icon getTreeExpandedIcon() {
-    return UIManager.getIcon("Tree.expandedIcon");
-  }
-
-  public static Icon getTreeSelectedCollapsedIcon() {
-    return IconLoader.getIcon("/icons/tree_white_right_arrow.png");
-  }
-
-  public static Icon getTreeSelectedExpandedIcon() {
-    return IconLoader.getIcon("/icons/tree_white_down_arrow.png");
   }
 
   public static void drawImage(Graphics g, Image image, int x, int y, ImageObserver observer) {
