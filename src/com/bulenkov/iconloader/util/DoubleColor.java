@@ -25,7 +25,6 @@ import java.awt.image.ColorModel;
 /**
  * @author Konstantin Bulenkov
  */
-@SuppressWarnings("UseJBColor")
 public class DoubleColor extends Color {
 
   private static volatile boolean DARK = UIUtil.isUnderDarcula();
