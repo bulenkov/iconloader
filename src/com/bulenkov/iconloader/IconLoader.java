@@ -469,7 +469,7 @@ public final class IconLoader {
       }
 
       Pair<Image, String> image = loadFromUrl(myUrl);
-      icon = checkIcon(image.first, myUrl);
+      icon = image != null ? checkIcon(image.first, myUrl) : null;
 
       if (icon != null) {
         if (icon.getIconWidth() < 50 && icon.getIconHeight() < 50) {
