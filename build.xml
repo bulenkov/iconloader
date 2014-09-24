@@ -126,7 +126,7 @@
   
   <path id="iconloader.module.sourcepath">
     <dirset dir="${module.iconloader.basedir}">
-      <include name="src"/>
+      <include name="src/main/java"/>
     </dirset>
   </path>
   
@@ -144,7 +144,7 @@
     </javac>
     
     <copy todir="${iconloader.output.dir}">
-      <fileset dir="${module.iconloader.basedir}/src">
+      <fileset dir="${module.iconloader.basedir}/src/main/java">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
