@@ -459,7 +459,7 @@ public final class IconLoader {
         return (Icon) realIcon;
       }
 
-      Icon icon;
+      Icon icon = null;
 
       if (realIcon instanceof Reference) {
         icon = (Icon) ((Reference) realIcon).get();
@@ -469,7 +469,9 @@ public final class IconLoader {
       }
 
       Pair<Image, String> image = loadFromUrl(myUrl);
-      icon = checkIcon(image.first, myUrl);
+      if (image != null) {
+        icon = checkIcon(image.first, myUrl);
+      }
 
       if (icon != null) {
         if (icon.getIconWidth() < 50 && icon.getIconHeight() < 50) {
