@@ -492,7 +492,22 @@ public final class IconLoader {
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
-      getRealIcon().paintIcon(c, g, x, y);
+      Icon icon = null;
+      if (isDisabled(c)) {
+        icon = getDisabledIcon(getRealIcon());
+      }
+      if (icon == null) {
+        icon = getRealIcon();
+      }
+      icon.paintIcon(c, g, x, y);
+    }
+
+    private boolean isDisabled(Component c) {
+      while (c != null) {
+        if (!c.isEnabled()) return true;
+        c = c.getParent();
+      }
+      return false;
     }
 
     @Override
