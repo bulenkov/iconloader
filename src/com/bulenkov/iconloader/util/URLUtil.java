@@ -49,7 +49,8 @@ public class URLUtil {
 
   public static InputStream openStream(URL url) throws IOException {
     String protocol = url.getProtocol();
-    return protocol.equals(JAR_PROTOCOL) ? openJarStream(url) : url.openStream();
+    boolean isFile = protocol.equals(JAR_PROTOCOL) && !url.getFile().startsWith(HTTP_PROTOCOL);
+    return isFile ? openJarStream(url) : url.openStream();
   }
 
 
