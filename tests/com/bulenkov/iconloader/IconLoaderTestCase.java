@@ -54,7 +54,7 @@ public abstract class IconLoaderTestCase extends TestCase {
     assert icon != null : "Can't find icon '" + path + "'";
     icon.getIconHeight();
 
-    final String realPath = ((IconLoader.CachedImageIcon) icon).realPath;
+    final String realPath = ((IconLoader.CachedImageIcon) icon).myOriginalPath;
     assert realPath != null && realPath.endsWith(expectedName) :
         "Icon should be loaded from '" + expectedName + "' but it was loaded from '" + realPath + "'";
   }

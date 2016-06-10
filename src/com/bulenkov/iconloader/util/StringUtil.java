@@ -16,7 +16,13 @@
 
 package com.bulenkov.iconloader.util;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -240,4 +246,59 @@ public class StringUtil {
     return name;
 
   }
+
+  @NotNull
+  @Contract(pure = true)
+  public static String join(@NotNull Collection<String> strings, @NotNull String separator) {
+    if (strings.size() <= 1) {
+      return notNullize(getFirstItem(strings));
+    }
+    StringBuilder result = new StringBuilder();
+    join(strings, separator, result);
+    return result.toString();
+  }
+
+  @Contract(pure = true)
+  public static String join(@NotNull Iterable<?> items, @NotNull @NonNls String separator) {
+    StringBuilder result = new StringBuilder();
+    for (Object item : items) {
+      result.append(item).append(separator);
+    }
+    if (result.length() > 0) {
+      result.setLength(result.length() - separator.length());
+    }
+    return result.toString();
+  }
+
+
+  @NotNull
+  public static String notNullize(@Nullable final String s) {
+    return notNullize(s, "");
+  }
+
+  @NotNull
+  public static String notNullize(@Nullable final String s, @NotNull String defaultValue) {
+    return s == null ? defaultValue : s;
+  }
+
+  public static void join(@NotNull Collection<String> strings, @NotNull String separator, @NotNull StringBuilder result) {
+    boolean isFirst = true;
+    for (String string : strings) {
+      if (string != null) {
+        if (isFirst) {
+          isFirst = false;
+        }
+        else {
+          result.append(separator);
+        }
+        result.append(string);
+      }
+    }
+  }
+
+  @Nullable
+  public static <T> T getFirstItem(@Nullable Collection<T> items) {
+    return items == null || items.isEmpty() ? null : items.iterator().next();
+  }
+
 }

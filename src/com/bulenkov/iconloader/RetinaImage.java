@@ -21,20 +21,42 @@ import com.bulenkov.iconloader.util.UIUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 /**
  * @author Konstantin Bulenkov
  */
 public class RetinaImage {
 
-  public static Image createFrom(Image image, final int scale, Component ourComponent) {
-    final int w = image.getWidth(ourComponent);
-    final int h = image.getHeight(ourComponent);
+  /**
+   * Creates a Retina-aware wrapper over a raw image.
+   * The raw image should be provided in scale of the Retina default scale factor (2x).
+   * The wrapper will represent the raw image in the user coordinate space.
+   *
+   * @param image the raw image
+   * @return the Retina-aware wrapper
+   */
+  public static Image createFrom(Image image) {
+    return createFrom(image, 2, IconLoader.ourComponent);
+  }
 
-    final Image hidpi = create(image, w / scale, h / scale, BufferedImage.TYPE_INT_ARGB);
+  /**
+   * Creates a Retina-aware wrapper over a raw image.
+   * The raw image should be provided in the specified scale.
+   * The wrapper will represent the raw image in the user coordinate space.
+   *
+   * @param image the raw image
+   * @param scale the raw image scale
+   * @param observer the raw image observer
+   * @return the Retina-aware wrapper
+   */
+  public static Image createFrom(Image image, final int scale, ImageObserver observer) {
+    int w = image.getWidth(observer);
+    int h = image.getHeight(observer);
 
+    Image hidpi = create(image, w / scale, h / scale, BufferedImage.TYPE_INT_ARGB);
     if (SystemInfo.isAppleJvm) {
-      Graphics2D g = (Graphics2D) hidpi.getGraphics();
+      Graphics2D g = (Graphics2D)hidpi.getGraphics();
       g.scale(1f / scale, 1f / scale);
       g.drawImage(image, 0, 0, null);
       g.dispose();
@@ -43,12 +65,12 @@ public class RetinaImage {
     return hidpi;
   }
 
-  public static BufferedImage create(int width, int height, int type) {
+  public static BufferedImage create(final int width, int height, int type) {
     return create(null, width, height, type);
   }
 
 
-  private static BufferedImage create(Image image, int width, int height, int type) {
+  private static BufferedImage create(Image image, final int width, int height, int type) {
     if (SystemInfo.isAppleJvm) {
       return AppleHiDPIScaledImage.create(width, height, type);
     } else {
@@ -61,6 +83,6 @@ public class RetinaImage {
   }
 
   public static boolean isAppleHiDPIScaledImage(Image image) {
-    return SystemInfo.isMac && UIUtil.isRetina() && AppleHiDPIScaledImage.is(image);
+    return UIUtil.isAppleRetina() && AppleHiDPIScaledImage.is(image);
   }
 }

@@ -39,7 +39,7 @@ public class SystemInfo {
   public static final boolean isAppleJvm = isAppleJvm();
   public static final boolean isOracleJvm = isOracleJvm();
   public static final boolean isSunJvm = isSunJvm();
-
+  public static final boolean isJetbrainsJvm = isJetbrainsJvm();
 
   public static boolean isOsVersionAtLeast(String version) {
     return compareVersionNumbers(OS_VERSION, version) >= 0;
@@ -130,5 +130,8 @@ public class SystemInfo {
     return System.getProperty("java.vm.vendor");
   }
 
-
+  private static boolean isJetbrainsJvm() {
+    final String vendor = System.getProperty("java.vendor");
+    return vendor != null && StringUtil.containsIgnoreCase(vendor, "jetbrains");
+  }
 }
