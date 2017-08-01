@@ -77,6 +77,10 @@
     <pathelement location="${basedir}/lib/eawtstub.jar"/>
   </path>
   
+  <path id="library.annotations.classpath">
+    <pathelement location="${basedir}/lib/annotations.jar"/>
+  </path>
+
   <!-- Modules -->
   
   
@@ -97,6 +101,7 @@
   
   <path id="iconloader.module.production.classpath">
     <path refid="library.eawtstub.classpath"/>
+    <path refid="library.annotations.classpath"/>
   </path>
   
   <path id="iconloader.runtime.production.module.classpath">
